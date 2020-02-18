@@ -1,7 +1,27 @@
 .userName{
     margin: 10px;
+    top: 0;
+    color: white;
     font-weight: bold;
     font-size: large;
+    position: absolute;
+    background: #312b312e;
+    padding: 1px 10px;
+    border-radius: 10px;
+}
+
+.img-desc{
+    padding: 10px;
+    margin: 0 !important;
+    position: absolute;
+    bottom: 0;
+    color: white;
+    background-color: #0000004d;
+}
+
+.image-card .ant-card-body {
+    padding: 0;
+    box-shadow: 0 6px 7px 0px rgba(0,0,0,0.2);
 }
 
 .divRight{

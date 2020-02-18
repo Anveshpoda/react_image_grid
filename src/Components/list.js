@@ -1,9 +1,9 @@
 import React, { Component, useState, useEffect } from 'react'
 // import { connect } from 'react-redux'
-import { Row, Col, Modal, message } from 'antd'
+import { Row, Col, Modal, message, Card } from 'antd'
 import StackGrid from "react-stack-grid";
-import ImageDetails from './imageDetails';
-import  saveImages  from '../actions'
+import ImageDetails from './imageDetailsForm';
+import {saveImageDetails} from '../actions'
 import { useSelector, useDispatch } from 'react-redux';
 
 
@@ -18,22 +18,15 @@ const List = (props) => {
         setTimeout(() => { window.dispatchEvent(new Event('resize')) }, 500)
     }, [])
 
-    const showImg = image => {
-        setVisible(true);
-        setImage(image)
-    }
+    const showImg = image => { setVisible(true); setImage(image) }
     const handleCancel = () => setVisible(false);
 
-    const saveImage = () => {
-        // Save this.state.image to new Array
-        let saved = savedImages.filter(img=> img.url == image.url) 
 
-        console.log(saved);
-
-        if(saved.length) return message.warn('Image Aready Saved')
-
-        dispatch(saveImages(image))
-        message.success('Image Saved Successfully')
+    const saveImage = data => {
+        // Save The Image Details
+        let url = image.url
+        dispatch(saveImageDetails({...data,url}))
+        message.success('Image Details Saved Successfully')
         setVisible(false)
     }
 
@@ -46,15 +39,24 @@ const List = (props) => {
                     gutterHeight={15} duration={0}
                     monitorImagesLoaded={true}>
 
-                    {props.data && props.data.map(image =>
-                        <div key={image.url} style={{ cursor: 'pointer' }} onClick={() => showImg(image)}>
-                            <img style={{ width: '100%' }} src={image.url} /></div>)}
+                    {props.tabId ?
+                        props.data.map(image =>
+                            <Card className="image-card">
+                                {image.name && <div className='userName'>{image.name}</div>}
+                                <img style={{ width: '100%' }} src={image.url} />
+                        {image.desc && <p className='img-desc' style={{ margin: '10px' }}>{image.desc}</p>}
+
+                            </Card>) :
+                        props.data && props.data.map(image =>
+                            <div key={image.url} style={{ cursor: 'pointer' }} onClick={() => showImg(image)}>
+                                <img style={{ width: '100%' }} src={image.url} /></div>)
+                    }
 
                 </StackGrid>
             </div>
 
             <Modal
-                width="900px" key="model"
+                width="400px" key="model"
                 visible={visible}
                 onCancel={handleCancel}
                 title={null} footer={null}
